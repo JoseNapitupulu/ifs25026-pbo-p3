@@ -2,23 +2,15 @@ package adapter.repository;
 
 import domain.repository.IRepository;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
- * Base generic in-memory repository yang mengimplementasikan {@link IRepository}.
- * Menghilangkan duplikasi kode penyimpanan list dan pencarian untuk berbagai entitas.
- *
- * @param <T>  tipe entitas domain
- * @param <ID> tipe data identifier unik entitas
- */
 public abstract class InMemoryRepository<T, ID> implements IRepository<T, ID> {
-    /** Penyimpanan data entitas di memori. */
-    protected final List<T> data = new ArrayList<>();
-
-    /** Fungsi untuk mengekstrak ID dari objek entitas. */
+    private final Map<ID, T> records = new LinkedHashMap<>();
     private final Function<T, ID> idExtractor;
 
     protected InMemoryRepository(Function<T, ID> idExtractor) {
@@ -27,37 +19,41 @@ public abstract class InMemoryRepository<T, ID> implements IRepository<T, ID> {
 
     @Override
     public List<T> findAll() {
-        // Salinan defensif agar data internal tidak termutasi dari luar
-        return new ArrayList<>(data);
+        return new ArrayList<>(records.values());
     }
 
     @Override
     public Optional<T> findById(ID id) {
-        return data.stream()
-                .filter(item -> idExtractor.apply(item).equals(id))
-                .findFirst();
+        return Optional.ofNullable(records.get(id));
     }
 
     @Override
     public T save(T entity) {
-        data.add(entity);
+        records.put(idExtractor.apply(entity), entity);
         return entity;
     }
 
     @Override
     public boolean deleteById(ID id) {
-        return data.removeIf(item -> idExtractor.apply(item).equals(id));
+        return records.remove(id) != null;
     }
 
     @Override
     public void update(T entity) {
-        // Objek mutable disimpan by-reference dalam memori.
+        ID id = idExtractor.apply(entity);
+        if (records.containsKey(id)) {
+            records.put(id, entity);
+        }
     }
 
     @Override
     public List<T> findBy(Predicate<T> predicate) {
-        return data.stream()
-                .filter(predicate)
-                .toList();
+        List<T> result = new ArrayList<>();
+        for (T entity : records.values()) {
+            if (predicate.test(entity)) {
+                result.add(entity);
+            }
+        }
+        return result;
     }
 }

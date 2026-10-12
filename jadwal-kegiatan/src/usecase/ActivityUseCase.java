@@ -12,9 +12,9 @@ public class ActivityUseCase {
     public Activity add(String title, String day, String time) throws ValidationException { validate(title, "Judul"); validate(day, "Hari"); validate(time, "Waktu"); return repository.save(new Activity(null, title.trim(), day.trim(), time.trim())); }
     public Activity update(int id, String title, String day, String time) throws ValidationException, EntityNotFoundException {
         Activity activity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Activity dengan ID " + id + " tidak ditemukan."));
-        if (!title.trim().isEmpty()) { validate(title, "Judul"); activity.changeTitle(title.trim()); }
-        if (!day.trim().isEmpty()) { validate(day, "Hari"); activity.changeDay(day.trim()); }
-        if (!time.trim().isEmpty()) { validate(time, "Waktu"); activity.changeTime(time.trim()); }
+        if (title != null && !title.trim().isEmpty()) { validate(title, "Judul"); activity.changeTitle(title.trim()); }
+        if (day != null && !day.trim().isEmpty()) { validate(day, "Hari"); activity.changeDay(day.trim()); }
+        if (time != null && !time.trim().isEmpty()) { validate(time, "Waktu"); activity.changeTime(time.trim()); }
         return activity;
     }
     public List<Activity> search(String title) throws ValidationException { validate(title, "Judul"); return repository.findByTitle(title.trim()); }
