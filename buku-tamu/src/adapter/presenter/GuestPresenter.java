@@ -4,15 +4,15 @@ import domain.entity.Guest;
 
 import java.util.List;
 
-public class GuestPresenter {
+public class GuestPresenter extends ConsolePresenter {
     public String formatGuest(Guest guest) {
         return String.format("[%d] %s | Tujuan: %s", guest.getId(), guest.getName(), guest.getPurpose());
     }
 
     public void showDashboard(List<Guest> guests) {
-        System.out.println("Daftar Tamu:");
+        printLine("Daftar Tamu:");
         if (guests.isEmpty()) {
-            System.out.println("- Data tamu belum tersedia!");
+            printLine("- Data tamu belum tersedia!");
         } else {
             showGuests(guests);
         }
@@ -20,31 +20,31 @@ public class GuestPresenter {
 
     public void showGuests(List<Guest> guests) {
         for (Guest guest : guests) {
-            System.out.println(formatGuest(guest));
+            printLine(formatGuest(guest));
         }
     }
 
     public void showRegistered(Guest guest) {
-        System.out.println("Berhasil mendaftarkan tamu: " + formatGuest(guest));
-        System.out.println();
+        printLine("Berhasil mendaftarkan tamu: " + formatGuest(guest));
+        printBlankLine();
     }
 
     public void showSearchResult(String query, List<Guest> guests) {
-        System.out.println("Hasil Pencarian: \"" + query + "\"");
+        printLine("Hasil Pencarian: \"" + query + "\"");
         if (guests.isEmpty()) {
-            System.out.println("- Tamu tidak ditemukan!");
+            printLine("- Tamu tidak ditemukan!");
         } else {
             showGuests(guests);
         }
-        System.out.println();
+        printBlankLine();
     }
 
     public void showDeleted() {
-        System.out.println("Berhasil menghapus tamu.");
-        System.out.println();
+        printLine("Berhasil menghapus tamu.");
+        printBlankLine();
     }
 
     public void showMessage(String message) {
-        System.out.println(message);
+        printLine(message);
     }
 }
