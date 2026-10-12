@@ -1,6 +1,8 @@
 package adapter.repository;
 
+import domain.exception.EntityNotFoundException;
 import domain.repository.IRepository;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,8 +36,11 @@ public abstract class InMemoryRepository<T, ID> implements IRepository<T, ID> {
     }
 
     @Override
-    public boolean deleteById(ID id) {
-        return records.remove(id) != null;
+    public void deleteById(ID id) throws EntityNotFoundException {
+        if (!records.containsKey(id)) {
+            throw new EntityNotFoundException("Kontak dengan ID " + id + " tidak ditemukan.");
+        }
+        records.remove(id);
     }
 
     @Override

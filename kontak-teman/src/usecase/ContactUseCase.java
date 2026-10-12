@@ -62,9 +62,7 @@ public class ContactUseCase {
     }
 
     public void delete(int id) throws EntityNotFoundException {
-        if (!repository.deleteById(id)) {
-            throw new EntityNotFoundException("Kontak dengan ID " + id + " tidak ditemukan.");
-        }
+        repository.deleteById(id);
     }
 
     private void validate(String value, String label) throws ValidationException {

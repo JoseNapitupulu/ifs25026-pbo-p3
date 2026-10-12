@@ -1,5 +1,7 @@
 package domain.repository;
 
+import domain.exception.EntityNotFoundException;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -20,8 +22,8 @@ public interface IRepository<T, ID> {
     /** Menyimpan entitas baru. */
     T save(T entity);
 
-    /** Menghapus entitas berdasarkan ID. Mengembalikan true jika berhasil dihapus. */
-    boolean deleteById(ID id);
+    /** Menghapus entitas berdasarkan ID. */
+    void deleteById(ID id) throws EntityNotFoundException;
 
     /** Menyimpan perubahan entitas yang sudah ada. */
     void update(T entity);
