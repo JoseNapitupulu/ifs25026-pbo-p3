@@ -2,8 +2,12 @@ package adapter.repository;
 
 import domain.entity.Contact;
 import domain.repository.IContactRepository;
+
 import java.util.List;
 
+/**
+ * Implementasi repository kontak berbasis memori.
+ */
 public class ContactRepository extends InMemoryRepository<Contact, Integer>
         implements IContactRepository {
     private int nextId = 1;
@@ -12,6 +16,7 @@ public class ContactRepository extends InMemoryRepository<Contact, Integer>
         super(Contact::getId);
     }
 
+    @Override
     public Contact save(String name, String phone, String email) {
         return save(new Contact(nextId++, name, phone, email));
     }

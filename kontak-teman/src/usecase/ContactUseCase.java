@@ -30,15 +30,18 @@ public class ContactUseCase {
         Contact contact = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Kontak dengan ID " + id
                         + " tidak ditemukan."));
-        if (!name.trim().isEmpty()) {
+
+        if (hasValue(name)) {
             validate(name, "Nama");
             contact.changeName(name.trim());
         }
-        if (!phone.trim().isEmpty()) {
+
+        if (hasValue(phone)) {
             validate(phone, "Nomor telepon");
             contact.changePhone(phone.trim());
         }
-        if (!email.trim().isEmpty()) {
+
+        if (hasValue(email)) {
             validate(email, "Email");
             contact.changeEmail(email.trim());
         }
@@ -69,5 +72,9 @@ public class ContactUseCase {
         if (value == null || value.trim().isEmpty()) {
             throw new ValidationException(label + " tidak boleh kosong.");
         }
+    }
+
+    private boolean hasValue(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 }

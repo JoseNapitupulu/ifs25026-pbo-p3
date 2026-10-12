@@ -120,8 +120,6 @@ public class ContactView {
         SortOption option = switch (choice) {
             case "1" -> SortOption.NAME_ASC;
             case "2" -> SortOption.NAME_DESC;
-            case "3" -> SortOption.PHONE_ASC;
-            case "4" -> SortOption.EMAIL_ASC;
             default -> null;
         };
         if (option == null) {

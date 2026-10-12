@@ -1,19 +1,23 @@
 package domain.entity;
 
+/**
+ * Entity domain yang merepresentasikan satu kontak teman.
+ * Entity tidak bergantung pada presenter, view, atau penyimpanan.
+ */
 public class Contact {
-    private final Integer id;
+    private final int id;
     private String name;
     private String phone;
     private String email;
 
-    public Contact(Integer id, String name, String phone, String email) {
+    public Contact(int id, String name, String phone, String email) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.email = email;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
