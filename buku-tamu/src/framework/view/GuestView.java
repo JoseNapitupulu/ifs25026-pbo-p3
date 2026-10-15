@@ -13,7 +13,6 @@ public class GuestView {
     private final GuestUseCase useCase;
     private final GuestPresenter presenter;
     private final InputUtil input = new InputUtil();
-    private int lastId;
 
     public GuestView(GuestUseCase useCase, GuestPresenter presenter) {
         this.useCase = useCase;
@@ -41,7 +40,7 @@ public class GuestView {
                 presenter.showMessage("[!] " + exception.getMessage());
                 presenter.showMessage("");
             } catch (EntityNotFoundException exception) {
-                presenter.showMessage("[!] Gagal menghapus tamu dengan ID: " + lastId + ".");
+                presenter.showMessage("[!] " + exception.getMessage());
                 presenter.showMessage("");
             }
         }
@@ -89,14 +88,15 @@ public class GuestView {
             presenter.showMessage("");
             return;
         }
+        int id;
         try {
-            lastId = Integer.parseInt(value);
+            id = Integer.parseInt(value);
         } catch (NumberFormatException exception) {
             presenter.showMessage("[!] ID tidak valid!");
             presenter.showMessage("");
             return;
         }
-        useCase.delete(lastId);
+        useCase.delete(id);
         presenter.showDeleted();
     }
 }

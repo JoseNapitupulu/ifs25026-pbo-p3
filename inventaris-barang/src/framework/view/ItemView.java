@@ -13,7 +13,6 @@ public class ItemView {
     private final ItemUseCase useCase;
     private final ItemPresenter presenter;
     private final InputUtil input = new InputUtil();
-    private int lastId;
 
     public ItemView(ItemUseCase useCase, ItemPresenter presenter) { this.useCase = useCase; this.presenter = presenter; }
 
@@ -37,7 +36,7 @@ public class ItemView {
             } catch (ValidationException exception) {
                 presenter.showMessage("[!] " + exception.getMessage()); presenter.showMessage("");
             } catch (EntityNotFoundException exception) {
-                presenter.showMessage("[!] Gagal menghapus barang dengan ID: " + lastId + "."); presenter.showMessage("");
+                presenter.showMessage("[!] " + exception.getMessage()); presenter.showMessage("");
             }
         }
     }
@@ -68,19 +67,14 @@ public class ItemView {
     private void update() throws ValidationException, EntityNotFoundException {
         presenter.showMessage("[Mengubah Stok]");
         String idValue = input.readLine("ID Barang yang diubah (x Jika Batal) : ").trim(); if (idValue.equalsIgnoreCase("x")) { presenter.showMessage(""); return; }
-        try { lastId = Integer.parseInt(idValue); } catch (NumberFormatException exception) { presenter.showMessage("[!] ID tidak valid!"); presenter.showMessage(""); return; }
+        int id;
+        try { id = Integer.parseInt(idValue); } catch (NumberFormatException exception) { presenter.showMessage("[!] ID tidak valid!"); presenter.showMessage(""); return; }
         String quantityValue = input.readLine("Jumlah Baru (Kosongkan jika tidak ingin mengubah) : ").trim();
         Integer quantity = null;
         if (!quantityValue.isEmpty()) {
             try { quantity = Integer.parseInt(quantityValue); } catch (NumberFormatException exception) { throw new ValidationException("Jumlah stok tidak valid!"); }
         }
-        try {
-            useCase.updateQuantity(lastId, quantity);
-        } catch (EntityNotFoundException exception) {
-            presenter.showMessage("[!] Gagal mengubah stok barang dengan ID: " + lastId + ".");
-            presenter.showMessage("");
-            return;
-        }
+        useCase.updateQuantity(id, quantity);
         presenter.showUpdated();
     }
 
@@ -104,7 +98,8 @@ public class ItemView {
     private void delete() throws EntityNotFoundException {
         presenter.showMessage("[Menghapus Barang]");
         String value = input.readLine("[ID Barang] yang dihapus (x Jika Batal) : ").trim(); if (value.equalsIgnoreCase("x")) { presenter.showMessage(""); return; }
-        try { lastId = Integer.parseInt(value); } catch (NumberFormatException exception) { presenter.showMessage("[!] ID tidak valid!"); presenter.showMessage(""); return; }
-        useCase.delete(lastId); presenter.showDeleted();
+        int id;
+        try { id = Integer.parseInt(value); } catch (NumberFormatException exception) { presenter.showMessage("[!] ID tidak valid!"); presenter.showMessage(""); return; }
+        useCase.delete(id); presenter.showDeleted();
     }
 }

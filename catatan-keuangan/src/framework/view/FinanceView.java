@@ -59,13 +59,11 @@ public class FinanceView {
                 presenter.showMessage("[!] " + exception.getMessage());
                 presenter.showMessage("");
             } catch (EntityNotFoundException exception) {
-                presenter.showMessage("[!] Gagal menghapus transaksi dengan ID: " + lastId + ".");
+                presenter.showMessage("[!] " + exception.getMessage());
                 presenter.showMessage("");
             }
         }
     }
-
-    private int lastId;
 
     private void showMenu() {
         presenter.showMessage("Menu:");
@@ -155,14 +153,15 @@ public class FinanceView {
             presenter.showMessage("");
             return;
         }
+        int id;
         try {
-            lastId = Integer.parseInt(value);
+            id = Integer.parseInt(value);
         } catch (NumberFormatException exception) {
             presenter.showMessage("[!] ID tidak valid!");
             presenter.showMessage("");
             return;
         }
-        useCase.delete(lastId);
+        useCase.delete(id);
         presenter.showDeleted();
         presenter.showMessage("");
     }
