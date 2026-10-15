@@ -12,7 +12,7 @@ public class ItemPresenter extends ConsolePresenter {
         if (items.isEmpty()) printLine("- Data barang belum tersedia!");
         else showItems(items);
     }
-    public void showItems(List<Item> items) { for (Item item : items) printLine(formatItem(item)); }
+    public void showItems(List<Item> items) { printList(items, this::formatItem); }
     public void showAdded(Item item) { printLine("Berhasil menambah barang: " + formatItem(item)); printBlankLine(); }
     public void showUpdated() { printLine("Berhasil mengubah stok barang."); printBlankLine(); }
     public void showSearchResult(String query, List<Item> items) {

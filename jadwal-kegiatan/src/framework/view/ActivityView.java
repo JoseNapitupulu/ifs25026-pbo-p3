@@ -39,6 +39,8 @@ public class ActivityView {
                 }
             } catch (ValidationException e) {
                 presenter.message("[!] " + e.getMessage());
+            } catch (EntityNotFoundException e) {
+                presenter.message("[!] Entitas tidak ditemukan: " + e.getMessage());
             }
 
             if (running) {
@@ -74,7 +76,7 @@ public class ActivityView {
         presenter.added(useCase.add(title, day, time));
     }
 
-    private void update() throws ValidationException {
+    private void update() throws ValidationException, EntityNotFoundException {
         presenter.message("[Mengubah Kegiatan]");
         String idValue = input.readLine("ID Kegiatan yang diubah (x Jika Batal) : ");
         if (isCancelled(idValue)) {
@@ -102,11 +104,7 @@ public class ActivityView {
             return;
         }
 
-        try {
-            presenter.updated(useCase.update(id, title, day, time));
-        } catch (EntityNotFoundException e) {
-            presenter.message("[!] Gagal mengubah kegiatan dengan ID: " + id + ".");
-        }
+        presenter.updated(useCase.update(id, title, day, time));
     }
 
     private void search() throws ValidationException {
@@ -146,7 +144,7 @@ public class ActivityView {
         presenter.sorted(useCase.sort(option));
     }
 
-    private void delete() throws ValidationException {
+    private void delete() throws ValidationException, EntityNotFoundException {
         presenter.message("[Menghapus Kegiatan]");
         String idValue = input.readLine("[ID Kegiatan] yang dihapus (x Jika Batal) : ");
         if (isCancelled(idValue)) {
@@ -161,12 +159,8 @@ public class ActivityView {
             return;
         }
 
-        try {
-            useCase.delete(id);
-            presenter.deleted();
-        } catch (EntityNotFoundException e) {
-            presenter.message("[!] Gagal menghapus kegiatan dengan ID: " + id + ".");
-        }
+        useCase.delete(id);
+        presenter.deleted();
     }
 
     private boolean isCancelled(String value) {

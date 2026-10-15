@@ -12,6 +12,7 @@ import usecase.ContactUseCase;
 public class ContactView {
     private final ContactUseCase useCase;
     private final ContactPresenter presenter;
+    private final InputUtil input = new InputUtil();
     private String pendingChoice;
 
     public ContactView(ContactUseCase useCase, ContactPresenter presenter) {
@@ -34,7 +35,7 @@ public class ContactView {
             pendingChoice = null;
             boolean choiceWasPending = choice != null;
             if (choice == null) {
-                choice = InputUtil.input("Pilih").trim();
+                choice = input.readLine("Pilih : ").trim();
             } else {
                 presenter.message("Pilih : ");
             }
@@ -62,18 +63,18 @@ public class ContactView {
 
     private void add() throws ValidationException {
         presenter.message("[Menambah Kontak]");
-        String name = InputUtil.input("Nama (x Jika Batal)");
+        String name = input.readLine("Nama (x Jika Batal) : ");
         if (cancelled(name)) return;
-        String phone = InputUtil.input("Telepon");
+        String phone = input.readLine("Telepon : ");
         if (cancelled(phone)) return;
-        String email = InputUtil.input("Email");
+        String email = input.readLine("Email : ");
         if (cancelled(email)) return;
         presenter.added(useCase.add(name, phone, email));
     }
 
     private void update() throws ValidationException, EntityNotFoundException {
         presenter.message("[Mengubah Kontak]");
-        String idValue = InputUtil.input("ID Kontak yang diubah (x Jika Batal)");
+        String idValue = input.readLine("ID Kontak yang diubah (x Jika Batal) : ");
         if (cancelled(idValue)) return;
         int id;
         try {
@@ -82,9 +83,9 @@ public class ContactView {
             presenter.message("[!] ID tidak valid!");
             return;
         }
-        String name = InputUtil.input("Nama Baru (Kosongkan jika tidak ingin mengubah)");
-        String phone = InputUtil.input("Telepon Baru (Kosongkan jika tidak ingin mengubah)");
-        String email = InputUtil.input("Email Baru (Kosongkan jika tidak ingin mengubah)");
+        String name = input.readLine("Nama Baru (Kosongkan jika tidak ingin mengubah) : ");
+        String phone = input.readLine("Telepon Baru (Kosongkan jika tidak ingin mengubah) : ");
+        String email = input.readLine("Email Baru (Kosongkan jika tidak ingin mengubah) : ");
         if (email.matches("[a-zA-Z]+") && phone.matches("\\d+")) {
             pendingChoice = email;
             email = phone;
@@ -102,7 +103,7 @@ public class ContactView {
 
     private void search() throws ValidationException {
         presenter.message("[Mencari Kontak]");
-        String keyword = InputUtil.input("Kata Kunci (x Jika Batal)");
+        String keyword = input.readLine("Kata Kunci (x Jika Batal) : ");
         if (!cancelled(keyword)) {
             presenter.search(keyword, useCase.search(keyword));
         }
@@ -114,7 +115,7 @@ public class ContactView {
         presenter.message("1. Nama (A-Z)");
         presenter.message("2. Nama (Z-A)");
         presenter.message("x. Batal");
-        String choice = InputUtil.input("Pilih");
+        String choice = input.readLine("Pilih : ");
         presenter.message("");
         if (cancelled(choice)) return;
         SortOption option = switch (choice) {
@@ -131,7 +132,7 @@ public class ContactView {
 
     private void delete() throws ValidationException, EntityNotFoundException {
         presenter.message("[Menghapus Kontak]");
-        String idValue = InputUtil.input("[ID Kontak] yang dihapus (x Jika Batal)");
+        String idValue = input.readLine("[ID Kontak] yang dihapus (x Jika Batal) : ");
         if (!cancelled(idValue)) {
             int id;
             try {

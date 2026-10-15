@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ContactPresenter extends ConsolePresenter {
     public void dashboard(List<Contact> contacts) {
-        printList("Daftar Kontak:", contacts, "- Data kontak belum tersedia!");
+        printList("Daftar Kontak:", contacts, "- Data kontak belum tersedia!", this::format);
     }
 
     public void added(Contact contact) {
@@ -18,11 +18,11 @@ public class ContactPresenter extends ConsolePresenter {
 
     public void search(String keyword, List<Contact> contacts) {
         printList("Hasil Pencarian: \"" + keyword + "\"", contacts,
-                "- Kontak tidak ditemukan!");
+                "- Kontak tidak ditemukan!", this::format);
     }
 
     public void sorted(List<Contact> contacts) {
-        printList("Daftar Kontak (Terurut):", contacts, "- Data kontak belum tersedia!");
+        printList("Daftar Kontak (Terurut):", contacts, "- Data kontak belum tersedia!", this::format);
     }
 
     public void deleted() {
@@ -31,15 +31,6 @@ public class ContactPresenter extends ConsolePresenter {
 
     public void message(String message) {
         printLine(message);
-    }
-
-    private void printList(String header, List<Contact> contacts, String emptyMessage) {
-        printLine(header);
-        if (contacts.isEmpty()) {
-            printLine(emptyMessage);
-            return;
-        }
-        contacts.forEach(contact -> printLine(format(contact)));
     }
 
     private String format(Contact contact) {

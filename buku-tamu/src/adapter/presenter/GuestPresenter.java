@@ -19,9 +19,7 @@ public class GuestPresenter extends ConsolePresenter {
     }
 
     public void showGuests(List<Guest> guests) {
-        for (Guest guest : guests) {
-            printLine(formatGuest(guest));
-        }
+        printList(guests, this::formatGuest);
     }
 
     public void showRegistered(Guest guest) {

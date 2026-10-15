@@ -56,9 +56,7 @@ public class FinancePresenter extends ConsolePresenter {
     }
 
     public void showTransactions(List<Transaction> transactions) {
-        for (Transaction transaction : transactions) {
-            printLine(formatTransactionWithoutBalance(transaction));
-        }
+        printList(transactions, this::formatTransactionWithoutBalance);
     }
 
     public void showTransactionsWithBalance(List<Transaction> transactions, long balance) {
