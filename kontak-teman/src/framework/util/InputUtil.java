@@ -9,7 +9,7 @@ public class InputUtil {
     public String readLine(String prompt) {
         System.out.print(prompt);
         if (!scanner.hasNextLine()) {
-            System.exit(0);
+            throw new IllegalStateException("Input konsol telah berakhir.");
         }
         return scanner.nextLine();
     }

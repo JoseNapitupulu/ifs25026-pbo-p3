@@ -19,9 +19,7 @@ public class ContactUseCase {
         validate(name, "Nama");
         validate(phone, "Nomor telepon");
         validate(email, "Email");
-        if (!email.trim().contains("@")) {
-            throw new ValidationException("Email harus memiliki format yang valid.");
-        }
+        validateEmail(email);
         return repository.save(name.trim(), phone.trim(), email.trim());
     }
 
@@ -43,6 +41,7 @@ public class ContactUseCase {
 
         if (hasValue(email)) {
             validate(email, "Email");
+            validateEmail(email);
             contact.changeEmail(email.trim());
         }
         repository.update(contact);
@@ -76,5 +75,14 @@ public class ContactUseCase {
 
     private boolean hasValue(String value) {
         return value != null && !value.trim().isEmpty();
+    }
+
+    private void validateEmail(String email) throws ValidationException {
+        String value = email.trim();
+        int at = value.indexOf('@');
+        if (at <= 0 || at != value.lastIndexOf('@') || at == value.length() - 1
+                || value.indexOf('.', at) < 0) {
+            throw new ValidationException("Email harus memiliki format yang valid.");
+        }
     }
 }

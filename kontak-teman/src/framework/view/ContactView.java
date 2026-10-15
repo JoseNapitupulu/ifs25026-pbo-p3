@@ -13,7 +13,6 @@ public class ContactView {
     private final ContactUseCase useCase;
     private final ContactPresenter presenter;
     private final InputUtil input = new InputUtil();
-    private String pendingChoice;
 
     public ContactView(ContactUseCase useCase, ContactPresenter presenter) {
         this.useCase = useCase;
@@ -31,17 +30,8 @@ public class ContactView {
             presenter.message("4. Urutkan");
             presenter.message("5. Hapus");
             presenter.message("x. Keluar");
-            String choice = pendingChoice;
-            pendingChoice = null;
-            boolean choiceWasPending = choice != null;
-            if (choice == null) {
-                choice = input.readLine("Pilih : ").trim();
-            } else {
-                presenter.message("Pilih : ");
-            }
-            if (!choiceWasPending) {
-                presenter.message("");
-            }
+            String choice = input.readLine("Pilih : ").trim();
+            presenter.message("");
             try {
                 switch (choice.toLowerCase()) {
                     case "1" -> add();
@@ -86,19 +76,7 @@ public class ContactView {
         String name = input.readLine("Nama Baru (Kosongkan jika tidak ingin mengubah) : ");
         String phone = input.readLine("Telepon Baru (Kosongkan jika tidak ingin mengubah) : ");
         String email = input.readLine("Email Baru (Kosongkan jika tidak ingin mengubah) : ");
-        if (email.matches("[a-zA-Z]+") && phone.matches("\\d+")) {
-            pendingChoice = email;
-            email = phone;
-            phone = "";
-        }
-        try {
-            presenter.updated(useCase.update(id, name, phone, email));
-        } catch (EntityNotFoundException e) {
-            if (email.matches("[1-5]")) {
-                pendingChoice = email;
-            }
-            presenter.message("[!] Gagal mengubah kontak dengan ID: " + id + ".");
-        }
+        presenter.updated(useCase.update(id, name, phone, email));
     }
 
     private void search() throws ValidationException {
